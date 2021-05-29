@@ -1,0 +1,431 @@
+
+ %  ____            _
+ % |  _ \ __ _  ___| | ____ _  __ _  ___  ___
+ % | |_) / _` |/ __| |/ / _` |/ _` |/ _ \/ __|
+ % |  __/ (_| | (__|   < (_| | (_| |  __/\__ \
+ % |_|   \__,_|\___|_|\_\__,_|\__, |\___||___/
+ %                            |___/
+
+
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[perpage]{footmisc}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancybox}
+\usepackage{verbatim}
+\usepackage{supertabular}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+\usepackage{titlesec}
+\usepackage{pgfornament}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{qrcode}
+\usepackage{pstricks}
+\usepackage{pifont}
+\usepackage{dsfont}
+
+
+ %   ____            _
+ %  / ___|___  _   _| | ___ _   _ _ __ ___
+ % | |   / _ \| | | | |/ _ \ | | | '__/ __|
+ % | |__| (_) | |_| | |  __/ |_| | |  \__ \
+ %  \____\___/ \__,_|_|\___|\__,_|_|  |___/
+
+
+
+\definecolor{ligthgrey}{RGB}{210,210,210}
+\definecolor{ligthgrey2}{RGB}{230,230,230}
+\definecolor{turquoise_f}{HTML}{085F63}
+\definecolor{turquoise_c}{HTML}{49BEB7}
+\definecolor{red_c}{HTML}{FF5959}
+\definecolor{red_cc}{HTML}{FFF2F2}
+\definecolor{yellow_f}{HTML}{FACF5A}
+\definecolor{yellow_c}{HTML}{FFFFDF}
+\definecolor{sweet_green}{HTML}{178C4A}
+\definecolor{blue_ff}{HTML}{004D61}
+\definecolor{blue_f}{HTML}{348498}
+\definecolor{blue_c}{HTML}{5BD1D7}
+\definecolor{blue_cc}{HTML}{F5F5FF}
+\titleformat*{\section}{\color{blue_ff}\bfseries\Large}
+\titleformat*{\subsection}{\color{blue_f}\bfseries\large}
+\titleformat*{\subsubsection}{\color{blue_c}\bfseries\large}
+
+
+ %  __  __ _
+ % |  \/  (_)___  ___    ___ _ __    _ __   __ _  __ _  ___
+ % | |\/| | / __|/ _ \  / _ \ '_ \  | '_ \ / _` |/ _` |/ _ \
+ % | |  | | \__ \  __/ |  __/ | | | | |_) | (_| | (_| |  __/
+ % |_|  |_|_|___/\___|  \___|_| |_| | .__/ \__,_|\__, |\___|
+ %                                  |_|          |___/
+
+
+\newcommand{\entetecours}[1]{
+\usepackage[top=2 cm, bottom=2.5cm, left=2.4cm, right=2.4cm]{geometry}
+\pagestyle{fancy}
+\renewcommand\headsep{20pt}
+\renewcommand\headrulewidth{1pt}
+\fancyhead[L]{\textcolor{turquoise_c}{Walid Laaziri \& Hicham Zghari}}
+%\fancyhead[C]{\color{red_c}\shadowbox{\Large #1}\\#2}
+\fancyhead[R]{\textcolor{turquoise_c}{2019 $\sim$ 2020}}
+\renewcommand\footrulewidth{1pt}
+\fancyfoot[C]{\includegraphics[scale=0.01]{fondblanc.jpg}}
+
+%\fancyfoot[R]{\textbf{Page \thepage}}
+\fancyfoot[L]{Encadrants: #1}
+}
+
+\newcommand{\entetelecture}
+{
+\usepackage[top=2cm, bottom=5cm, left=2cm, right=2cm]{geometry}
+\usepackage{background}
+\backgroundsetup{
+scale=1,
+opacity=1,
+angle=0,
+color=purple,
+contents={%
+\begin{tikzpicture}[every node/.style={inner sep=0pt}]
+\node[shift={(0.2cm,-0.2cm)},anchor=north west](CNW)
+at (current page.north west) {\pgfornament[width=2cm]{39}};
+\node[shift={(-0.2cm,-0.2cm)},anchor=north east](CNE)
+at (current page.north east) {\pgfornament[width=2cm,symmetry=v]{39}};
+\node[shift={(0.2cm,0.2cm)},anchor=south west](CSW)
+at (current page.south west) {\pgfornament[width=2cm,symmetry=h]{39}};
+\node[shift={(-0.2cm,0.2cm)},anchor=south east](CSE)
+at (current page.south east) {\pgfornament[width=2cm,symmetry=c]{39}};
+\end{tikzpicture}%
+  }
+}
+}
+
+
+ %   ____                      _
+ %  / ___|___  _ __ ___  _ __ | |_ ___ _   _ _ __ ___
+ % | |   / _ \| '_ ` _ \| '_ \| __/ _ \ | | | '__/ __|
+ % | |__| (_) | | | | | | |_) | ||  __/ |_| | |  \__ \
+ %  \____\___/|_| |_| |_| .__/ \__\___|\__,_|_|  |___/
+ %                      |_|
+
+
+\newcounter{compteurExo}
+
+
+ %  ____       _                _                    _
+ % |  _ \ _ __(_)___  ___    __| | ___   _ __   ___ | |_ ___
+ % | |_) | '__| / __|/ _ \  / _` |/ _ \ | '_ \ / _ \| __/ _ \
+ % |  __/| |  | \__ \  __/ | (_| |  __/ | | | | (_) | ||  __/
+ % |_|   |_|  |_|___/\___|  \__,_|\___| |_| |_|\___/ \__\___|
+
+
+
+\newcommand{\rem}[1]{
+\begin{description}
+\item [\textit{\textbf{Remarque :}}] #1
+\end{description}
+}
+\newcommand{\ex}[1]{
+\begin{description}
+\item [\textit{\textbf{Exemple :}}] #1
+\end{description}
+}
+\newcommand{\prop}{\textit{\textbf{Proposition. }}}
+\newcommand{\theo}{\textit{\textbf{Théorème. }}}
+\newcommand{\lem}{\textit{\textbf{Lemme. }}}
+\newcommand{\demo}{\textit{\textbf{Démonstration. }}}
+\newcommand{\ssi}{\text{ ssi }}
+
+
+ %   ___          __           _
+ %  / _ \ _ __   /_/ _ __ __ _| |_ ___ _   _ _ __ ___
+ % | | | | '_ \ / _ \ '__/ _` | __/ _ \ | | | '__/ __|
+ % | |_| | |_) |  __/ | | (_| | ||  __/ |_| | |  \__ \
+ %  \___/| .__/ \___|_|  \__,_|\__\___|\__,_|_|  |___/
+ %       |_|
+
+
+\newcommand{\dlim}[2]{\lim\limits_{#1 \rightarrow #2}}
+\newcommand{\dint}[2]{\int_{#1}^{#2}}
+\newcommand{\dsum}[2]{\sum\limits_{#1}^{#2}}
+\newcommand{\dprod}[2]{\prod\limits_{#1}^{#2}}
+\newcommand{\equi}[2]{\underset{#1\to#2}{\sim}}
+\newcommand{\po}[1]{{\text{o}}\left(#1\right)}
+\newcommand{\GO}[1]{{\text{O}}\left(#1\right)}
+\newcommand{\scal}[2]{\left<#1\,|\,#2\right>}
+\newcommand{\congru}[2]{\equiv #1 \:[#2]}
+\newcommand{\ZnZ}[1]{\raisebox{0.3ex}{$\Z$}$/$\hspace{-0.05cm}\raisebox{-0.5ex}{${#1}\displaystyle\Z$}}
+
+
+ %  _         _   _
+ % | |    ___| |_| |_ _ __ ___  ___
+ % | |   / _ \ __| __| '__/ _ \/ __|
+ % | |__|  __/ |_| |_| | |  __/\__ \
+ % |_____\___|\__|\__|_|  \___||___/
+
+
+
+\def\parties{\mathscr{P}}
+\def\R{\mathbb R}
+\def\C{\mathbb C}
+\def\Z{\mathbb Z}
+\def\Q{\mathbb Q}
+\def\U{\mathbb U}
+\def\N{\mathbb N}
+\def\K{\mathbb K}
+\def\GL{\mathcal{GL}}
+\def\SO{\mathcal{SO}}
+\def\L{\mathcal{L}}
+\def\Pr{\mathbb{P}}
+
+\def\ind{\mathds{1}}
+
+\newcommand{\de}[1]{\overset{\text{déf}}{#1}}
+\def\env{\simeq}
+\def\id{\operatorname{id}}
+\def\Id{\operatorname{Id}}
+\def\Supp{\operatorname{Supp}}
+\newcommand\Vect[1]{\operatorname{Vect}\{#1\}}
+\def\Var{\operatorname{Var}}
+\def\Re{\text{Re}}
+\def\I{\text{Im}}
+
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\norm}[1]{\|#1\|}
+
+\def\tr{\operatorname{tr}}
+\def\argmin{\operatorname{argmin}}
+\def\argmax{\operatorname{argmax}}
+\def\Mat{\operatorname{Mat}}
+\def\Im{\operatorname{Im}}
+\def\Ker{\operatorname{Ker}}
+\def\rg{\operatorname{rg}}
+\def\Card{\operatorname{Card}}
+\def\pgcd{\wedge}
+\def\ppcm{\vee}
+\newcommand{\mat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+\newcommand{\mdet}[1]{\left|\begin{array}{cccccccc} #1
+ \end{array}\right|}
+\newcommand{\dmat}[2]{\left( \begin{array}{#1|#1} #2
+ \end{array}\right)}
+\newcommand{\detmat}[1]{\begin{vmatrix} #1 \end{vmatrix}}
+\newcommand{\tcom}[1]{{}^{t}\widetilde{#1}}
+\newcommand{\trans}[1]{^{t}\hspace{-0.1cm}#1}
+\newcommand{\udots}{\reflectbox{$\ddots$}}
+
+\def\exp{\mathrm{e}}
+\def\ch{\operatorname{ch}}
+\def\sh{\operatorname{sh}}
+\def\th{\operatorname{th}}
+\newcommand{\fonc}[2]{#1\longmapsto #2}
+\newcommand{\foncc}[4]{\left\{\begin{array}{ccc}#1 & \longrightarrow & #2 \\ #3& \longmapsto & #4\end{array}\right.}
+\def\exo{\boxed{\text{exo}}}
+\newcommand{\CQFD}{\hfill CQFD}
+
+\newcommand{\et}{\text{ et }}
+\newcommand{\ou}{\text{ ou }}
+
+\def\a{\alpha}
+\def\b{\beta}
+\def\g{\gamma}
+\def\d{\delta}
+\def\e{\varepsilon}
+\def\z{\zeta}
+\def\t{\vartheta}
+\def\ta{\tau}
+\def\i{\iota}
+\def\k{\kappa}
+\def\l{\lambda}
+\def\m{\mu}
+\def\n{\nu}
+\def\x{\xi}
+\def\r{\rho}
+\def\s{\sigma}
+\def\up{\upsilon}
+\def\f{\varphi}
+\def\p{\psi}
+\def\w{\omega}
+\def\G{\Gamma}
+\def\D{\Delta}
+\def\T{\Theta}
+\def\X{\Xi}
+\def\F{\Phi}
+\def\P{\Psi}
+\def\W{\Omega}
+\def\ve{\epsilon}
+\def\vt{\theta}
+\def\vr{\varrho}
+\def\vf{\phi}
+\def\iso{\simeq}
+\def\M{\mathcal{M}}
+\def\B{\mathcal{B}}
+
+
+ %  ____           _
+ % |  _ \ ___  ___| |_ ___
+ % | |_) / _ \/ __| __/ _ \
+ % |  _ <  __/\__ \ ||  __/
+ % |_| \_\___||___/\__\___|
+
+
+
+\newcommand{\sys}[1]{\[
+\left \{
+\begin{array}{c @{=} c}
+#1
+\end{array}
+\right.
+\]}
+
+\newcommand{\bresu}[2]
+{\vspace*{0.5cm}
+\begin{center}
+\boxput*(0,1){\setlength{\fboxsep}{0pt}\color{red_c}\shadowbox{\setlength{\fboxsep}{5pt}\fcolorbox{white}{white}{\large\textbf{#1}}}}{\setlength{\fboxsep}{8pt}\fcolorbox{red_c}{red_cc}{\parbox{16cm}{\vspace*{0.4cm} #2}}}\end{center}}
+
+\newcommand{\bpreuve}[1]
+{\vspace*{0cm}
+\begin{center}
+\boxput*(-0.8,1){\fcolorbox{white}{white}{\textbf{Preuve}}}{\setlength{\fboxsep}{8pt}\doublebox{\parbox{15cm}{#1}}}\end{center}}
+
+\newcommand{\bexo}[1]
+{\stepcounter{compteurExo}\vspace*{0.2cm}
+\begin{center}
+\boxput*(0,1){\setlength{\fboxsep}{0pt}\color{blue_ff}\shadowbox{\setlength{\fboxsep}{3pt}\fcolorbox{white}{white}{\textbf{Exercice \thecompteurExo}}}}{\setlength{\fboxsep}{8pt}\fcolorbox{blue_ff}{blue_cc}{\parbox{16cm}{\vspace*{0.2cm} #1}}}\end{center}}
+
+
+\definecolor{codegreen}{rgb}{0,0.5,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0,0.5,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.93,0.88}
+
+\lstdefinestyle{mystyle}{
+    frame=TBlr,
+    backgroundcolor=\color{yellow_c},
+    commentstyle=\color{red_c},
+    keywordstyle=\color{blue_f},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=t,
+    keepspaces=true,
+    numbers=left,
+    numbersep=7pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\setitemize[1]{label=\ding{221}}
+\setitemize[2]{label=\ding{67}}
+
+\newcommand\pagedegardecours[2]{%
+    \null
+    \vfill
+    \begin{center}
+        \pgfornament[color=red_c, height = 3cm]{69}\\
+        \vspace{0.5cm}
+        {\fontfamily{pzc}\selectfont \Huge\textbf
+        Rapport de projet S5 C :\\
+        Atomic Teddy Investors
+        }\\
+        \vspace{0.2cm}
+        {\fontfamily{pzc}\selectfont \Large\textbf
+        Par : Walid Laaziri \& Hicham Zghari\\
+        Encadrants: M. Clément \& Mme Desainte-Catherine\\
+        \vspace{0.5cm}
+        \pgfornament[color=red_c, height = 3cm, symmetry = h]{69}
+        }
+    \end{center}
+    \begin{figure}[b]
+    \includegraphics[scale=0.2]{logo.png}
+    \end{figure}
+    \vfill
+    \newpage
+    \tableofcontents
+    %% \vfill
+    %% \begin{center}
+    %% \pgfornament[color=blue_f,width=3cm, symmetry = h]{15}\pgfornament[color=blue_f,width=3cm, symmetry = h]{16}
+    %% \\
+    %% \vspace{-0.25cm}
+    %% \pgfornament[color=blue_f,width=0.7cm, symmetry = h]{12}
+    %% \\
+    %% \vspace{0.7cm}
+    %% \textsl{\fontfamily{pzc}\selectfont #1}
+    %% \\
+    %% \textsc{- #2 -}
+    %% \end{center}
+
+    %% \vfill
+    \newpage
+    \setcounter{page}{1}}
+
+\newcommand{\pagedegardelecture}[2]{
+
+\begin{center}
+\begin{center} \pgfornament[color=purple,height=3cm]{68}
+\end{center}
+\vspace{0.2cm}
+{\fontfamily{pzc}\selectfont \Huge\textbf #1}
+\\
+\textsc{- #2 -}
+\vspace{0.2cm}
+\begin{center} \pgfornament[color=purple,height=3cm,symmetry=h]{66} \end{center} Walid Laaziri\\$2019$ \vspace{0.75\baselineskip} % Whitespace below the title
+\end{center}
+
+\vfill
+\tableofcontents
+\vfill
+\newpage
+}
+
+
+\renewcommand{\lstlistingname}{Code}
+
+\newcommand{\fin}{
+\vfill
+\begin{center}
+    \pgfornament[color=blue_f, height = 4.5cm]{60}
+\end{center}
+\vfill}
+
+\newcommand{\qr}[1]{
+$\qrset{height=1.4cm}\qrcode{#1}$
+}
+
+\newcommand{\sep}{
+\vspace{0.3cm}
+\begin{center}
+    \pgfornament[color=blue_f, height = 0.7cm]{4}
+\vspace{0.3cm}
+\end{center}
+}
+
+\newcommand{\gr}[1]{\textbf{#1}}
+\newcommand{\caps}[1]{textsc{#1}}
+\newcommand{\light}[1]{\gr{\color{sweet_green} #1}}
+\newcommand{\borel}{\mathcal{B}}
+
+
+\setcounter{tocdepth}{2}
+
+\newcommand{\vertab}[1]{
+\begin{tabular}{|l}
+    #1
+\end{tabular}
+}
+
+\newcommand{\legen}[2]{
+\mat{#1\\\hline#2}
+}

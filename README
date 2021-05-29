@@ -1,0 +1,20 @@
+This is the first version of my S5 projetc.
+
+
+                         << Makefile version>>
+			 
+To compile the project with makefile:    make; ./project
+To run tests using makefile         :    make test
+To clean                            :    make clean
+
+
+
+                           << Bazel version>>
+			   
+To build the project using "bazel":      bazel build //src:project
+To build tests using "bazel"      :      bazel build //tst:test
+
+To run project using "bazel"      :      ./bazel-bin/src/project
+To run tests using "bazel"        :      ./bazel-bin/tst/test
+
+To clean                          :      bazel clean

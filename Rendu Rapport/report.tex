@@ -1,0 +1,312 @@
+\documentclass[12pt]{article}
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+\input{zp_bis.tex}
+\entetecours{M. Clément \& Mme Desainte-Catherine}
+\begin{document}
+%\setcounter{tocdepth}{2}
+\onecolumn
+\pagedegardecours{Atomic Teddy Investors}{Walid Laaziri & Hicham Zghari}
+\fancyhead[C]{\color{red_c} Atomic Teddy Investors}
+\fancyfoot[R]{\textbf{Page \thepage}}
+\section{Introduction}
+Ce rapport vise à présenter notre démarche de réalisation du projet de programmation de $1^{ère}$ année. Le projet consiste en l'implémentation d'un jeu de stratégie où des ours, réalisent des échanges de ressources tour à tour, sur différentes places d'échanges, en fonction de leur capital.
+\subsection{Contexte}
+\begin{figure}[!h]
+		    \centering
+		    \shadowbox{\includegraphics[width=10cm]{la-fameuse-invasion-des-ours-en-sicile-photo-1107060.jpg}}
+		    \caption{Affiche du film \textit{La Fameuse Invasion de la Sicile par les ours}, de Lorenzo Mattoti}
+                    \label{Fig1}
+	\end{figure}
+Le contexte s'inspire du roman de Dino Buzzati, \textit{La Fameuse Invasion de la Sicile par les ours}, qui a fait l'objet d'une adaptation cinématographique de Lorenzo Mattoti (affiche en FIGURE~\ref{Fig1}). Après l'invasion de la Sicile par les ours, ces derniers s'intègrent dans les activités humaines. Ils sont attirés par l'économie de marché et décident donc de s'y consacrer corps et âme. Ainsi, ils rivalisent de stratégies afin d'amasser des fortunes colossales. Leur unique monnaie d'échange est le miel, qui leur est si cher. \\
+
+        C'est dans ce contexte que s'inscrit le jeu que nous allons implémenter au cours de ce projet. En effet, les ours, que l'on surnomme affectueusement \texttt{teddys}, jouent chacun leur tour sur les places d'échanges. Au cours d'un tour, un \texttt{teddy} effectue une transaction sur une place d'échanges. Cette transaction le redirige, ensuite, vers une nouvelle place d'échanges.
+        \subsection{Description de la demande}
+Afin de modéliser ce jeu, les teddys sont placés initialement dans une file de priorité. L'implémentation de cette file de priorité est le coeur du jeu. De plus, il est nécessaire d'établir différentes stratégies pour les teddys et d'évaluer la stratégie optimale qui assure le gain. Enfin, on améliorera le jeu en ajoutant une limitation de ressources dans le monde des \texttt{teddys}. Ainsi, les valeurs des ressources pourront évoluer en fonction de leur disponibilité.
+\subsection{Problématique}
+Dans le cadre de la réalisation de ce jeu en C, plusieurs problématiques se profilent.
+\begin{itemize}
+\item En pratique, quelle structure devrions-nous choisir pour implémenter la file de priorité ? En effet, il est primordial de faire un choix qui soit adapté aux opérations d'ajout et de retrait de teddys dans la file, avec des complexités optimales.
+\item Comment garantir la robustesse du projet à différentes implémentations de la même interface ?
+\item Quelles sont les stratégies positionnelles envisageables? Serait-il possible de définir une fonction qui permette de déterminer la stratégie optimale?
+\item Comment limiter les ressources disponibles et faire évoluer leur valeur en fonction de leur disponibilité ?
+\end{itemize}
+
+
+\section{Organisation du travail}
+
+        \subsection{Répartition des tâches}
+        Le travail a été divisé de manière égale et complémentaire. Nous nous sommes répartis les différentes tâches de codage. Quant aux réflexions autour des problématiques algorithmiques et des choix d'implémentations, nous en débattions pendant les séances de projet. Cette organisation nous permettait d'avoir les idées claires afin d'entamer ou de continuer la production du code chez nous, en dehors des séances. Il a fallu faire preuve de coordination. 
+        \subsection{Outils utilisés}
+        \subsubsection{Git}
+        Nous avons utilisé le système de gestion de version Git. Les différentes versions du code sont stockées sur la \texttt{Forge} de L'ENSEIRB-MATMECA (serveur \texttt{Thor Project Manager}). De plus, chacun a accès à un dépôt local dans son arborescence de fichiers. Cette nouvelle manière de travailler a été rude à mettre en place. Nous avons engendré plusieurs conflits au début de notre projet. Néanmoins, nous avons pu apprécier les avantages de ce système. En effet, il nous permet de visualiser l'évolution de notre projet et de corriger d'éventuels mauvais choix, grâce à la disponibilité de toutes les versions intermédiaires.\\
+        \subsubsection{Emacs}
+        Nous avons utilisé l'éditeur de texte Emacs que nous utilisons régulièrement dans les autres unités d'enseignement.\\
+        \subsubsection{LateX}
+        Nous avons rédigé ce rapport en \LaTeX. Ce dernier est un langage que nous avons appris à utiliser en cours d' ``Environnement de Travail'' (IF104).\\
+        \subsection{Arborescence des fichiers}
+        Nous avons utilisé l'outil de compilation \texttt{make} en créant un fichier \texttt{Makefile}. Nous avons organisé nos données dans plusieurs fichiers \texttt{.c} et \texttt{.h}. Les fichiers \texttt{queue.h} et \texttt{good.h} contiennent toutes les structures et les signatures de fonctions utilisées respectivement dans les fichier \texttt{queue.c} et \texttt{good.c}. Les fichiers \texttt{stockex.h} et \texttt{transac.h} contiennent les structures et les signatures des fonctions utilisées dans les fichiers \texttt{stockex.c}. Le fichier \texttt{initialisation.h} contient les tructures et les signatures de fonctions utilisées dans le fichier \texttt{initialisation.c}. Le fichier \texttt{project-2.c}, quant à lui, contient la boucle principale du jeu et fait appel à toutes les fonctions et structures prédéfinies dans les fichiers \texttt{.h}. On peut schématiser les liens entre les différents fichiers par la FIGURE 2 ci-dessous.
+        \begin{figure}[!h]
+		    \centering
+		    \tikzset{
+  basic/.style  = {draw, text width=2cm, drop shadow, font=\sffamily, rectangle},
+  root/.style   = {basic, rounded corners=2pt, thin, align=center,
+                   fill=blue!60!green!40},
+  level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=blue!60!green!40,
+                   text width=8em},
+  level 3/.style = {basic, thin, align=left, fill=pink!70, text width=7.5em}
+}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=40mm},
+  edge from parent/.style={->,draw},
+  >=latex]
+
+% root of the the initial tree, level 1
+\node[root] {Latest}
+% The first level, as children of the initial tree
+  child {node[level 2] (c1) {Src}}
+  child {node[level 2] (c2) {Tst}};
+
+% The second level, relatively positioned nodes
+\begin{scope}[every node/.style={level 3}]
+\node [below of = c1, xshift=15pt] (c11) {good.\{h,c\}};
+\node [below of = c11] (c12) {transac.h};
+\node [below of = c12] (c13) {stockex.\{h,c\}};
+\node [below of = c13] (c14) {queue.\{h,c\}};
+\node [below of = c14] (c15) {initialisation.\{h,c\}};
+\node [below of = c15] (c16) {project-2.c};
+
+\node [below of = c2, xshift=15pt] (c21) {test-2.c};
+
+\end{scope}
+
+% lines from each level 1 node to every one of its "children"
+\foreach \value in {1,...,6}
+  \draw[->] (c1.185) |- (c1\value.west);
+
+\foreach \value in {1}
+  \draw[->] (c2.190) |- (c2\value.west);
+
+   
+\end{tikzpicture}}
+			\caption{Arborescence des fichiers}
+        \end{figure} \\
+    
+        \subsection{Structures de données}
+        Les structures de données ont été un point essentiel de la réflexion sur le projet. En effet, nous les avons implémentées de manière à ce que notre code soit le plus compréhensible possible (noms de variables représentatifs). Nous avons rédigé l'ensemble de notre code en anglais (noms de variables, noms des fonctions, contantes et structures de données). Néanmoins, par soucis de compréhension et de respect de langue du sujet, nous avons choisi de retourner les sorties printf en français.\\
+        \subsubsection{Constantes}
+        \begin{itemize}
+         \item \textbf{Constantes globales}\\
+         Les constantes globales sont: \texttt{MAX\_GOOD} qui représente le nombre maximal de ressources, \texttt{MAX\_PLAYERS} qui représente le nombre maximal de joueurs et \texttt{MAX\_STOCKEX} qui représente le nombre maximal de places d'échanges.
+         \item \textbf{Constantes définies dans \texttt{project\-2.c}}\\
+         Dans \texttt{project\-2.c}, on définit \texttt{seed} qui représente la graine aléatoire, \texttt{players} qui représente le nombre de joueurs, \texttt{turns} qui représent le nombre de tours, \texttt{max\_party\_time} qui représente le nombre maximal de parties et \texttt{max\_transactions\_number} qui représente le nombre maximal de transactions réalisables par un \texttt{teddy} pendant un tour.
+        \end{itemize}
+
+        \subsubsection{Structures basiques}
+        \begin{itemize}
+         \item \textbf{Structures good et structure wallet}\\
+         
+         Dans le fichier \texttt{good.h}, nous avons repris l'énumération \texttt{enum good} et la structure \texttt{struct wallet} proposées dans le sujet. L'énumération \texttt{good} sert à énumérer toutes les ressources qui existent dans le monde des \texttt{teddys}. Quant à la structure \texttt{struct wallet}, elle permet de représenter le porte-feuille d'un \texttt{teddy} et contient un tableau d'entiers non signés dont la taille est égale au maximum des ressources possibles. Chaque case du tableau représente la quantité disponible pour une ressource. \\
+         
+         Nous avons implémenté des fonctions permettant de manipuler l'enumération \texttt{good}. La première fonction est \texttt{good\_\_string}. Cette dernière utilise un \texttt{switch} qui permet de retourner la description d'une ressources entrée en paramètre. La deuxième fonction, nommée \texttt{good\_\_value}, permet, quant à elle, de retourner la valeur en \texttt{HONEY} correspondant à la ressource entrée en paramètre de type \texttt{enum good}. De plus, nous avons ajouté deux fonctions afin de permettre la limitation des ressources (Achievement 3). La fonction \texttt{good\_\_total\_amount} retourn la quantité maximale pour une ressource et la fonction \texttt{good\_\_set\_value} qui permet de modifier la valeur d'une ressource. Ces deux dernières fonctions se font en temps constant.\\
+         
+         
+         \item \textbf{Structures stockex et transac}\\
+         
+         La structure de données \texttt{struct stockex} (Code 2) représente une place d'échange. Elle comporte le nom de la place d'échange de type \texttt{char *}, le nombre de tansactions réalisable sur la place d'échange, de type \texttt{int} et un tableau de transactions de type \texttt{struct tansac} de taille constante \texttt{MAX\_TRANSAC} (fixée à 20 dans le sujet). Cette structure \texttt{transac} (Code 1) représente une transaction. Une transaction étant un échange de porte-feuilles (achat et vente), la structure contient deux structures \texttt{wallet} et un pointeur vers une autre place d'échange. En effet, chaque transaction doit mener à une autre place d'échange où le teddy pourra réaliser une autre transaction.
+         \begin{lstlisting}[language=C, caption=Structure \texttt{transac}]
+         struct transac{
+            struct wallet achat;
+            struct wallet vente;
+            const struct stockex* next_stockex;
+         };\end{lstlisting}
+        \begin{lstlisting}[language=C, caption=Structure \texttt{stockex}]
+         struct stockex{
+            char* place;
+            int nombre_transactions;
+            struct transac transactions[Max_transac];
+        };\end{lstlisting}
+        \\
+        
+        On utilise, de plus, plusieurs fonctions qui utilisent la \texttt{struct transac} et qui sont relatives aux transactions. Tout d'abord, la fonction \texttt{starting\_stockex()} permet d'initialiser une place d'échange. Ensuite, la fonction \texttt{our\_\_starting\_stockex} qui prend un entier et retourne la place d'échanges qui a pour indice cet entier dans le tableau qui contient les différentes places d'échanges. La fonction \texttt{stockex\_\_name}, quant à elle, permet de retourner le nom de la place d'échanges qui lui est passée en paramètre. La fonction \texttt{stockex\_\_num\_transactions} retourne le nombre de transactions disponibles dans une place d'échanges. Une autre fonction, nommée \texttt{stockex\_\_transaction}, prend en paramètres une structure \texttt{stockex} et un entier, et retourne la transaction de la place d'échanges qui a pour indice l'entier entré en paramètre.
+        Ensuite, la fonction \texttt{transac\_\_in\_wallet} qui retourne les rassources reçues par la places d'échanges au cours d'une transaction, entrée en paramètre. Réciproquement, la fonction \texttt{transac\_\_out\_wallet} retourne les ressources achetées par le \texttt{teddy} au cours d'une transaction entrée en paramètre. De plus, nous avons implémenté la fonction \texttt{transac\_\_next\_stockex} qui renvoie la place d'échange à laquelle mène la transaction passée en paramètre. Toutes les fonctions présentées précédemment sont de complexité en temps constante. Enfin, nous avons implémenté une fonction \texttt{transac\_\_stockex} qui retourne la place d'échange qui contient la transaction qui est passée en paramètre. La complexité en temps de cette fonction est $\GO{nm}$ où $n$ est le nombre moyen de transactions par places d'échanges. \\
+        
+        
+        \item \textbf{Structure teddy}\\
+        
+        La structure \texttt{struct teddy} (Code 3) représente un joueur. Elle contient l'identifiant du joueur qui est de type entier, le porte-feuille du joueur qui est de type \texttt{struct wallet}, sa priorité (qui est égale à son temps de jeu dans le sujet) qui est de type entier, sa place d'échange actuelle qui est un pointeur vers une structure \texttt{stockex}. De plus, nous y avons inclus un tableau de pointeurs vers des structures \texttt{stockex} qui représente les places d'échanges visitées par le joueur. Enfin, elle contient également un entier qui représente le nombre de places d'échanges visitées et un entier qui ne peut prendre comme valeur que 0 ou 1. Cet entier permet de savoir si un teddy utilise une stratégie au cours du jeu (l'entier vaut 1) ou s'il agit aléatoirement (l'entier vaut 0).
+        \begin{lstlisting}[language=C, caption=Structure \texttt{teddy}]
+         struct teddy {
+            int name;
+            struct wallet w;
+            int time;
+            const struct stockex* current_stockex;
+            const struct stockex* stockex_visited[MAX_STOCKEX];
+            int number_stockex_visited;
+            int optimal;
+        };\end{lstlisting}
+        \end{itemize}\\
+        
+        \section{Implémentation de la file de priorité}
+        \subsection{Implémentation pratique}
+        La file de priorité est l'élément central du jeu. Son implémentation nous a demandé plusieurs heures de réflexion. En effet, le choix de la structure est déterminant pour la suite du projet. Le but était de pouvoir réaliser trois opérations de base sur cette file de priorité:
+        \begin{itemize}
+        \item Initialisation d'une file de priorité.
+         \item Retirer le \texttt{teddy} de plus faible priorité de la file.
+         \item Placer un \texttt{teddy} dans la file en fonction de sa priorité.\\
+
+           \begin{figure}[!h]
+\begin{tikzpicture}
+  \draw node[vertex] (Joint) at (1,0) {};
+  \node (Argument0) at (0,0) {Top};
+  \node[draw,fill=blue!60!green!40] (ArgumentA) at (2.1,0) {Ourson: 1};
+  \node[draw] (ArgumentB) at (5.1,0) {Ted: 1};
+  \node[draw] (ArgumentC) at (8.1,0) {Winnie: 3};
+  \node[draw] (ArgumentD) at (11.1,0) {Baloo: 7};
+  \node[draw] (ArgumentE) at (14.1,0) {Paddington: 10};
+  \draw[-] (ArgumentA) to (ArgumentB);
+  \draw[-] (ArgumentB) to (ArgumentC);
+  \draw[-] (ArgumentC) to (ArgumentD);
+  \draw[-] (ArgumentD) to (ArgumentE);
+\end{tikzpicture}
+\end{center}
+\newline
+\newline
+\begin{center}
+\begin{tikzpicture}
+  \draw node[vertex] (Joint) at (1,0) {};
+  \node (Argument0) at (0,0) {Pop};
+  \node[draw,fill=blue!60!green!40] (ArgumentA) at (2.1,0) {Ourson: 1};
+  \node[draw] (ArgumentB) at (5.1,0) {Ted: 1};
+  \node[draw] (ArgumentC) at (8.1,0) {Winnie: 3};
+  \node[draw] (ArgumentD) at (11.1,0) {Baloo: 7};
+  \node[draw] (ArgumentE) at (14.1,0) {Paddington: 10};
+  \draw[-] (ArgumentB) to (ArgumentC);
+  \draw[-] (ArgumentC) to (ArgumentD);
+  \draw[-] (ArgumentD) to (ArgumentE);
+\end{tikzpicture}
+\end{center}
+\newline
+\newline
+\begin{center}
+\begin{tikzpicture}
+  \draw node[vertex] (Joint) at (1,0) {};
+  \node[draw,fill=blue!60!green!40] (ArgumentA) at (2.1,0) {Ourson: 4};
+  \node (Argument0) at (0,0) {Play};
+  \node[draw] (ArgumentB) at (5.1,0) {Ted: 1};
+  \node[draw] (ArgumentC) at (8.1,0) {Winnie: 3};
+  \node[draw] (ArgumentD) at (11.1,0) {Baloo: 7};
+  \node[draw] (ArgumentE) at (14.1,0) {Paddington: 10};
+  \draw[-] (ArgumentB) to (ArgumentC);
+  \draw[-] (ArgumentC) to (ArgumentD);
+  \draw[-] (ArgumentD) to (ArgumentE);
+\end{tikzpicture}
+\end{center}
+\newline
+\newline
+\begin{center}
+\begin{tikzpicture}
+  \draw node[vertex] (Joint) at (1,0) {};
+  \node (Argument0) at (0,0) {Push};
+  \node[draw] (ArgumentA) at (2.1,0) {Ted: 1};
+  \node[draw] (ArgumentB) at (5.1,0) {Winnie: 3};
+  \node[draw,fill=blue!60!green!40] (ArgumentC) at (8.1,0) {Ourson: 4};
+  \node[draw] (ArgumentD) at (11.1,0) {Baloo: 7};
+  \node[draw] (ArgumentE) at (14.1,0) {Paddington: 10};
+  \draw[-] (ArgumentA) to (ArgumentB);
+  \draw[-] (ArgumentB) to (ArgumentC);
+  \draw[-] (ArgumentC) to (ArgumentD);
+  \draw[-] (ArgumentD) to (ArgumentE);
+\end{tikzpicture}
+	\caption{Schématisation des opérations élémentaires sur la file}
+        \end{figure} \\
+         
+        Nous nous sommes d'abord orienter vers une représentation de la file de priorité à l'aide d'un tableau de \texttt{teddys}. Néanmois, nous nous sommes rapidement rendus compte que cette implémentation était inefficace car l'insertion d'un \texttt{teddy} dans la file de priorité ne donnait pas les résultats attendus.En effet, lorsque le \texttt{teddy} est inséré dans la file, il faut également décaler tous les \texttt{teddys} qui sont dans une case d'indice supérieur ou égal à l'indice d'insertion, d'un indice vers la fin de la file. Cette opération n'était pas possible avec un tableau car la gestion de la mémoire qu'il permettait n'était pas adaptée. Nous nous sommes alors tournés vers une représentation à l'aide d'un tableau de pointeurs, qui nous a permis de gérer ce problème.
+        Ainsi, la structure \texttt{struct queue} (Code 4) qui représente la file de priorité contient le tableau de pointeurs vers des \texttt{struct teddy} dont la taille est égale au maximum de joueurs autorisés par le jeu (qui est défini dans le sujet par la constante MAX\_PLAYERS qui vaut 20). La structure contient également un entier représentant la taille de la file.
+        \begin{lstlisting}[language=C, caption=Structure \texttt{queue}]
+         struct queue {
+            int size;
+            struct teddy* tab[MAX\_PLAYERS];
+        };\end{lstlisting}
+        \\
+        La fonction \texttt{queue\_\_create()} nous permet d'initialiser une file de priorité vide. Sa complexité en temps est constante en $\GO{1}$. \\
+        
+        La fonction \texttt{queue\_\_pop} permet de retirer le \texttt{teddy} de plus faible priorité de la file. Elle nécessite une fonction auxiliaire, nommée \texttt{queue\_\_top} qui retourne le \texttt{teddy} placé en haut de la file (qui est celui de plus faible priorité). Nous avons choisi de maintenir le tableau de pointeurs constamment triés par ordre décroissant de priorité. Cela nous permet de réaliser la fonction \texttt{queue\_\_top} en temps constant $\GO{1}$. Elle n'a  donc pas d'impact sur la complexité de la fonction \texttt{queue\_\_pop}. Cette dernière, quant à elle, est réalisé en temps linéaire. Cette complexité est due à la boucle \texttt{while} qui permet de décaler tous les \texttt{teddys} d'une case vers la tête de la file. Ce décalage est nécessaire afin de maintenir le tableau de pointeur trié dans l'ordre décrit précédemment. Cette fonction est ainsi en $\GO{n}$ en temps.\\
+        
+        La fonction \texttt{queue\_\_push} permet d'insérer un teddy dans la file de priorité en fonction de sa priorité. Ainsi, elle a recours à une fonction auxiliaire \texttt{index\_of\_teddy} qui retourne la valeur de l'indice de la file où insérer le \texttt{teddy}. Comme le tableau est maintenu trié, cette fonction est dans le pire des cas (celui où le teddy est de priorité plus grande que tous les autres) linéaire. La fonction \texttt{queue\_\_push} fait donc d'abord appel à \texttt{index\_of\_teddy} pour stocker l'indice d'insertion du \texttt{teddy} à insérer. Ensuite, le \texttt{teddy} est inséré à l'aide d'une boucle qui est réalisée dans le pire des cas en temps linéaire. La fonction \texttt{queue\_\_push} est donc, globalement, en $\GO{n}$ en temps.\\
+        \end{itemize}
+        \subsection{Regard critique et autres choix possibles}
+       Une alternative au tableau de pointeurs vers des \texttt{teddys} serait une liste chaînée de \texttt{teddys}. Ainsi, nous aurions utilisé une gestion dynamique de la mémoire grâce à: \texttt{malloc}, \texttt{reallocate} et \texttt{free}, qui auraient permis une gestion de la mémoire optimale. Néanmoins, encore inexpérimentés à l'utilisation des \texttt{mallocs}, nous avons préféré manipuler des pointeurs qui nous sont plus familiers.\\
+        \section{Boucle de jeu}
+        
+        \subsection{Fonctions élémentaires de jeu}
+        Plusieurs fonctions ont été implémentées afin de faire tourner la boucle de jeu. Nous avons respecté le cadre décrit dans l'achievement 3. En effet, toute ressource différente du \texttt{HONEY} est associée à une quantité disponible maximale. De plus, tout achat alors qu'il reste moins de 10\% des ressources disponibles entraîne une augmentation de la valeur de la ressource de 1 et toute action de vente alors qu'il reste plus de 90\% des ressources disponibles fait baisser la valeur de la ressource de 1. \\
+        \begin{itemize}
+         \item La fonction \texttt{parse\_opts}, sert à gérer les options de jeu qui sont entrées en paramètres : le nombres de joueurs, le nombre de tours et la valeur de la graine aléatoire. Sa complexité est linéaire en la taille de \texttt{argv}. Elle est essentielle pour lancer le jeu.\\
+         
+        \item La fonction \texttt{max\_transactions\_possible} prend en paramètre un pointeur vers une transaction et un pointeur vers un \texttt{teddy} et retourne le maximum de fois que ce teddy peut réaliser cette transaction. Cette fonction a une complexité en temps en $\GO{n}$. Elle est utilisée dans la version de base du projet (achievement 0) et la première version (achievement 1). Pour la deuxième et la troisième version, nous l'avons remplacée par la fonction \texttt{transaction\_possible} qui prend en paramètres un pointeur vers une transaction et un pointeur vers un \texttt{teddy}, auxquels on ajoute (pour l'achievement 3) un tableau contenant les quantités de ressources disponibles. Cette fonction retourne 0 si le \texttt{teddy} ne peut pas faire la transaction et 1 s'il le peut. Cette fonction a une complexité en temps en $\GO{n}$, elle est linéaire en le nombre maximal de ressources.   \\
+        
+        \item La fonction \texttt{gain\_transaction} retourne le gain total en \texttt{HONEY} que permet une transaction. Elle est de complexité en temps linéaire en le nombre maximal de ressources définies.\\
+        
+        \item La fonction \texttt{best\_transaction}, quant à elle, retourne la meilleure transaction possible dans une place d'échange donnée pour un teddy donné. Sa complexité en temps est linéaire en le nombre de transactions que permet la place d'échange donnée.\\
+        
+        \item La fonction \texttt{is\_visited} prend en paramètres un pointeur vers une place d'échanges et un \texttt{teddy} et retourne 1 s'il a déjà visité la place ou 0 sinon. Sa complexité temporelle est linéaire en le nombre de places visitées par le \texttt{teddy}.\\
+        
+        \item La fonction \texttt{do\_transactions} prend en paramètres un pointeur vers une transaction, un pointeur vers un \texttt{teddy} et un entier \texttt{n}, et fait faire au \texttt{teddy} \texttt{n} fois la transaction donnée.Sa complexité est linéaire en le nombre maximal de ressources. On l'utilise pour l'achievement 0 et l'achievement 1. Pour l'achievement 2, on lui apporte des modifications. En effet, le paramètre \texttt{n} disparaît et le \texttt{teddy} ne fait qu'une seule fois la transaction passée en paramètre. Enfin, pour l'achievement 3, on lui passe en paramètre supplémentaires un tableau qui contient les quantités disponibles de ressources. Elle permet alors au \texttt{teddy} de réaliser une fois la transaction passée en paramètres et modifie les quantités de ressources disponibles.
+        \end{itemize}\\
+        
+        Ces fonctions permettent de réaliser les actions nécessaires au déroulement du jeu et servent de base à l'implémentation des stratégies. 
+        \subsection{Stratégie de base: aléatoire}
+        \subsubsection{Implémentation}
+        Dans un premier temps, nous allons implémenter une stratégie totalement aléatoire. Dans cette version, qui correspond à l'achievement 0 et à l'achievement 1, les \texttt{teddys} jouent de manière aléatoire en sélectionnant une place d'échange et en échangeant des ressources sur cette place un nombre aléatoire de fois, en fonction de leur moyens. Ensuite, losqu'il a réalisé sa transaction il est redirigé vers la place d'échange suivante. 
+        La fonction \texttt{active\_teddy\_play1} implémente cette stratégie. Elle fait appel à des fonctions auxiliaires définies précédemment: \texttt{is\_visited}, \texttt{max\_transactions\_possible} et \texttt{do\_transactions}. Dans le pire des cas, sa complexité en temps est en $\GO{n}$. 
+        \subsection{Stratégie 2: Choix de la transaction la plus rentable}
+        \subsubsection{Principe}
+        Dans cette amélioration, nous implémenterons une nouvelle stratégie qui consiste à choisir la transaction qui permet le plus gros gain positif et qui donne la possibilité au \texttt{teddy} de passer son tour et de changer de place d'échanges si aucune transaction ne lui permet un gain positif.
+        \subsubsection{Fonction de jeu adaptée}
+        La fonction \texttt{active\_teddy\_play2} permet d'implémenter cette stratégie. En effet, elle fait appel aux fonctions \texttt{do\_transactions} et \texttt{best\_transaction}.  Cette fonction a une complexité en temps en $\GO{n}$.
+        \subsection{Stratégie 3: Aléatoire intelligent}
+        \subsubsection{Principe}
+        Nous avons choisi d'implémenter une troisième stratégie qui consiste à jouer de manière aléatoire mais en ne retenant que les transactions de gain positif.
+        \subsubsection{Fonction de jeu adaptée}
+        La fonction \texttt{active\_teddy\_play3} permet de réaliser cette stratégie. Elle fait appel aux fonctions : \texttt{do\_transactions} et \texttt{best\_transaction}. Cette fonction a une complexité en temps en $\GO{n}$ où $n$ est le nombre maximal de ressources.
+        \subsection{Comparaison des différentes stratégies}
+        Nous avons collecté des résultats de tests, grâce à un script Shell, afin de comparer les différentes stratégies entre elles et de trouver la plus efficace. La stratégie 2 présente 48\% de réussites tandis que la stratégie 3 présente 52\% de réussites. La stratégie 1 ne permet pas le gain, ce qui est cohérent. 
+        \subsection{Autres stratégies envisageables}
+        Nous n'avons pensé, pour l'instant, qu'à des stratégies où le \texttt{teddy} ne considère que les transactions de la place dans laquelle il se trouve pour établir sa stratégie. Il serait judicieux d'implémenter une stratégie algorithmique qui calculerait le gain permis par les différents chemins du graphe des places déchanges et de choisir le plus avantageux. Cette stratégie serait une stratégie gloutonne, assez coûteuse en temps.\\
+  
+        Il serait intéressant de considérer une solution qui se baserait sur du Machine Learning. En effet, cela commencerait par l'implémentation d'un réseau de neurones adapté à la situation. Ensuite, il faudrait procéder à une étape d'apprentissage, en laissant le \texttt{teddy} faire de nombreuses parties en gardant pour objectif d'avoir le plus gros gain. Mais cette stratégie est difficile à implémenter et nécessite une grande dimension théorique.
+        \section{Conclusion et Discussions}
+        Pour conclure, ce projet nous a permis de découvrir la manière de travailler de manière collaborative (utilisation de git) sur un même code. De plus, nous avons pu mettre en pratique et approfondir nos connaissances en matière de programmation \texttt{C}, en environnement de travail, gâce à l'utilisation des commandes bash et également en algorithmique théorique. En effet, nous avons sans cesse questionné la complexité en temps de nos algorithmes.\\
+        
+        Il aurait été intéressant de développer une interface graphique pour le jeu qui a un fort aspect ludique. En effet, on peut l'assimiler à un jeu de plateau où le plateau est composé de plusieurs places d'échanges et les \texttt{teddys} seraient représentés par des pions. 
+        
+
+\end{document}
+
